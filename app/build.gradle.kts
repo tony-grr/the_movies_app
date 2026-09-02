@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -44,6 +48,24 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.kotlinx.coroutines.android)
+    //hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    //Retrofit
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.logging.interceptor)
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
+    //navigation
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+    // ViewModel Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

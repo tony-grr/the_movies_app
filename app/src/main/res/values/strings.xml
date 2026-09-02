@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">The Movies App</string>
+    <string name="auth_title">Авторизация</string>
+    <string name="api_key_input_caption">Api ключ</string>
+    <string name="account_id_input_caption">Id профиля</string>
+    <string name="do_auth_btn_text">Авторизоваться</string>
 </resources>
