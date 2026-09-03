@@ -4,50 +4,50 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.themoviesapp.presentation.screen.auth.AuthScreen
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
+import com.example.themoviesapp.navigation.AppRootNavGraph
+import com.example.themoviesapp.navigation.AppRootRoute
+import com.example.themoviesapp.presentation.screen.splashscreen.SplashScreen
 import com.example.themoviesapp.presentation.theme.TheMoviesAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TheMoviesAppTheme {
-                AuthScreen {
-
+                //отслеживание состояния проверки существования данных для авторизации
+                val isAuthDataExistingChecked by viewModel.isAuthDataExistingChecked.collectAsStateWithLifecycle()
+                //если проверка существования данных для авторизации выполнена
+                if (isAuthDataExistingChecked){
+                    val navController = rememberNavController()
+                    //отслеживание состояния авторизации
+                    val isAuthorized by viewModel.isAuthorized.collectAsStateWithLifecycle()
+                    AppRootNavGraph(
+                        navHostController = navController,
+                        //если пользователь уже авторизован(в системе сохранен токен авторизации),
+                        //то стартовым маршрутом навигации будет основной экран приложения
+                        //иначе экран авторизации
+                        startDestination = if (isAuthorized)
+                            AppRootRoute.AppContainer
+                        else AppRootRoute.Auth,
+                        onLogout = {
+                            viewModel.logout()
+                        }
+                    )
                 }
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
+                else {
+                    //отображение заставки на время проверки существования токена
+                    SplashScreen()
+                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TheMoviesAppTheme {
-        Greeting("Android")
     }
 }

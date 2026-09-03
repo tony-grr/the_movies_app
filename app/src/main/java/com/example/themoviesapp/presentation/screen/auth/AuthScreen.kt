@@ -92,7 +92,7 @@ fun AuthScreen(
                     containerColor = MaterialTheme.colorScheme.tertiary,
                     disabledContainerColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                enabled = !uiState.isLoading,
+                enabled = !uiState.isLoading && uiState.apiKey.isNotBlank() && uiState.accountId.isNotBlank(),
                 onClick = {viewModel.handleIntent(AuthViewModelIntents.Save)}
             ) {
                 if (uiState.isLoading) {

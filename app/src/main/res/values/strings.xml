@@ -4,4 +4,7 @@
     <string name="api_key_input_caption">Api ключ</string>
     <string name="account_id_input_caption">Id профиля</string>
     <string name="do_auth_btn_text">Авторизоваться</string>
+    <string name="main_icon_label">Главная</string>
+    <string name="favorite_icon_label">Избранное</string>
+    <string name="account_icon_label">Аккаунт</string>,
 </resources>
