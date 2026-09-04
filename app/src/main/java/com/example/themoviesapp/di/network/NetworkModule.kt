@@ -2,6 +2,7 @@ package com.example.themoviesapp.di.network
 
 import com.example.themoviesapp.data.network.auth.interceptor.TokenInterceptor
 import com.example.themoviesapp.data.network.auth.service.AuthApiService
+import com.example.themoviesapp.data.network.genre.service.GenreApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,9 +47,4 @@ object NetworkModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthApiService(retrofit: Retrofit): AuthApiService {
-        return retrofit.create(AuthApiService::class.java)
-    }
 }
