@@ -57,8 +57,8 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkTokenAndAccountIdExistence(): Boolean {
-        return (getApiKey() != null && getAccountId() != null).let {
-            _isAuthorized.updateAndGet { it }
+        return (getApiKey() != null && getAccountId() != null).let { isAuthDataExist ->
+            _isAuthorized.updateAndGet { isAuthDataExist }
         }
     }
 }

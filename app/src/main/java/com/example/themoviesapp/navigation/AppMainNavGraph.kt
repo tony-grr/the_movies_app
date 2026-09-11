@@ -14,11 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.themoviesapp.R
 import com.example.themoviesapp.presentation.screen.auth.AuthViewModelIntents
+import com.example.themoviesapp.presentation.screen.main.MainScreen
 
 @Composable
 fun AppMainNavGraph(
@@ -33,22 +36,21 @@ fun AppMainNavGraph(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
+                .padding(paddingValues)
         ){
             NavHost(
                 navController = innerNavController,
                 startDestination = AppMainRoute.Main,
             ){
                 composable<AppMainRoute.Main>{
-                    Text("Main Screen")
+                    MainScreen()
                 }
                 composable<AppMainRoute.Favorites>{
-                    Text("Favorites Screen")
+                    Text(stringResource(R.string.favorites_screen_title))
                 }
                 composable<AppMainRoute.Account>{
                     Column {
-                        Text("Account Screen")
+                        Text(stringResource(R.string.account_screen_title))
                         Button(
                             shape = RoundedCornerShape(30.dp),
                             colors = ButtonDefaults.buttonColors().copy(
@@ -57,7 +59,7 @@ fun AppMainNavGraph(
                             ),
                             onClick = {onLogout()}
                         ){
-                            Text("Logout")
+                            Text(stringResource(R.string.logout_btn_text))
                         }
                     }
 

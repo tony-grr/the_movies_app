@@ -12,6 +12,9 @@ interface GenreDao {
     @Query("SELECT * FROM genres")
     fun getAllGenres(): Flow<List<GenreEntity>>
 
+    @Query("SELECT COUNT(*) FROM genres")
+    suspend fun getGenresCount(): Int
+
     @Query("SELECT * FROM genres WHERE id = :id LIMIT 1")
     suspend fun getGenreById(id: Int): GenreEntity?
 

@@ -6,5 +6,14 @@
     <string name="do_auth_btn_text">Авторизоваться</string>
     <string name="main_icon_label">Главная</string>
     <string name="favorite_icon_label">Избранное</string>
-    <string name="account_icon_label">Аккаунт</string>,
+    <string name="account_icon_label">Аккаунт</string>
+    <string name="main_title">Фильмы</string>
+    <string name="sort_description">Сортировка</string>
+    <string name="sort_popular">Популярные</string>
+    <string name="sort_top_rated">Топ рейтинга</string>
+    <string name="movie_rating_format">Рейтинг: %1$.1f</string>
+    <string name="favorites_screen_title">Экран избранного</string>
+    <string name="account_screen_title">Экран аккаунта</string>
+    <string name="logout_btn_text">Выйти</string>
+    <string name="adult_tag">18+</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.themoviesapp.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.domain.repository.auth.AuthRepository
@@ -31,6 +32,7 @@ class MainViewModel @Inject constructor(
             //при этом обновляется флаг авторизации
             authRepository.checkTokenAndAccountIdExistence()
             delay(500.milliseconds)
+            Log.d("auth debug", "main vm checkTokenAndAccountIdExistence isAuthorized ${isAuthorized.value}")
             _isAuthDataExistingChecked.update {
                 true
             }

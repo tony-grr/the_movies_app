@@ -22,6 +22,10 @@ class GenreRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getGenresCount(): Int {
+        return genreDao.getGenresCount()
+    }
+
     override suspend fun refreshGenres() {
         try {
             val response = apiService.getList()
