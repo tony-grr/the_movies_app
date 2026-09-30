@@ -22,6 +22,7 @@ import com.example.themoviesapp.presentation.screen.main.components.MovieCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    onMovieClick: (Int) -> Unit,
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -137,7 +138,8 @@ fun MainScreen(
                     items(uiState.movies) { movie ->
                         MovieCard(
                             movie = movie,
-                            genreNames = movie.genreIds.mapNotNull { uiState.genresMap[it] }
+                            genreNames = movie.genreIds.mapNotNull { uiState.genresMap[it] },
+                            onMovieClick = onMovieClick
                         )
                     }
 

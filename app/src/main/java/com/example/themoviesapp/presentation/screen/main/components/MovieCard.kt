@@ -1,6 +1,6 @@
 package com.example.themoviesapp.presentation.screen.main.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -20,17 +20,20 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.themoviesapp.R
 import com.example.themoviesapp.domain.entity.movie.Movie
+import com.example.themoviesapp.presentation.screen.components.AdultTag
 
 @Composable
 fun MovieCard(
     movie: Movie,
     genreNames: List<String>,
+    onMovieClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onMovieClick(movie.id) },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -55,23 +58,11 @@ fun MovieCard(
                     contentScale = ContentScale.Crop
                 )
                 if (movie.adult) {
-                    Box(
+                    AdultTag(
                         modifier = Modifier
                             .padding(4.dp)
                             .align(Alignment.TopStart)
-                            .background(
-                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
-                                shape = RoundedCornerShape(4.dp)
-                            )
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.adult_tag),
-                            color = MaterialTheme.colorScheme.onError,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    )
                 }
             }
 

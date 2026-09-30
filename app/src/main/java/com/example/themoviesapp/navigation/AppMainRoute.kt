@@ -9,7 +9,14 @@ sealed class AppMainRoute(
     val labelResourceId: Int
 ){
     @Serializable
-    object Main : AppMainRoute(iconResourceId = R.drawable.house_icon, labelResourceId = R.string.main_icon_label)
+    object Main : AppMainRoute(iconResourceId = R.drawable.house_icon, labelResourceId = R.string.main_icon_label) {
+        @Serializable
+        object List
+
+        @Serializable
+        data class Detail(val movieId: Int)
+    }
+    
     @Serializable object Favorites : AppMainRoute(iconResourceId = R.drawable.bookmark_icon, labelResourceId = R.string.favorite_icon_label)
     @Serializable object Account : AppMainRoute(iconResourceId = R.drawable.person_icon, labelResourceId = R.string.account_icon_label)
 

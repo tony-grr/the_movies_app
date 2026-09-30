@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -36,7 +37,7 @@ fun AppBottomNavigationBar(
                 NavigationBarItem(
                     icon = { Icon(painterResource(navItem.iconResourceId), contentDescription = stringResource( navItem.labelResourceId)) },
                     label = { Text(text = stringResource( navItem.labelResourceId)) },
-                    selected = currentDestination?.hasRoute(navItem::class) == true,
+                    selected = currentDestination?.hierarchy?.any { it.hasRoute(navItem::class) } == true,
                     onClick = {
                         navController.navigate(navItem) {
                             popUpTo<AppMainRoute.Main> {

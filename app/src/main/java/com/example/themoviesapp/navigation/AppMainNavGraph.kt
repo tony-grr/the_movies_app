@@ -22,6 +22,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.themoviesapp.R
 import com.example.themoviesapp.presentation.screen.auth.AuthViewModelIntents
 import com.example.themoviesapp.presentation.screen.main.MainScreen
+import com.example.themoviesapp.presentation.screen.movie_detail.MovieDetailsScreen
+import androidx.navigation.compose.navigation
 
 @Composable
 fun AppMainNavGraph(
@@ -42,8 +44,17 @@ fun AppMainNavGraph(
                 navController = innerNavController,
                 startDestination = AppMainRoute.Main,
             ){
-                composable<AppMainRoute.Main>{
-                    MainScreen()
+                navigation<AppMainRoute.Main>(startDestination = AppMainRoute.Main.List) {
+                    composable<AppMainRoute.Main.List> {
+                        MainScreen(onMovieClick = { movieId ->
+                            innerNavController.navigate(AppMainRoute.Main.Detail(movieId))
+                        })
+                    }
+                    composable<AppMainRoute.Main.Detail> {
+                        MovieDetailsScreen(
+                            onNavigateBack = { innerNavController.popBackStack() }
+                        )
+                    }
                 }
                 composable<AppMainRoute.Favorites>{
                     Text(stringResource(R.string.favorites_screen_title))

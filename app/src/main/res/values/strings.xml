@@ -16,4 +16,8 @@
     <string name="account_screen_title">Экран аккаунта</string>
     <string name="logout_btn_text">Выйти</string>
     <string name="adult_tag">18+</string>
+    <string name="back_description">Назад</string>
+    <string name="movie_rating_votes_format">Рейтинг: %1$s (%2$s голосов)</string>
+    <string name="movie_release_format">Релиз: %1$s</string>
+    <string name="movie_overview_title">Описание</string>
 </resources>
