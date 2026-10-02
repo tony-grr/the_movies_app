@@ -4,6 +4,7 @@ import com.example.themoviesapp.domain.entity.movie.Movie
 
 data class MainScreenUiState(
     val movies: List<Movie> = emptyList(),
+    val favoriteIds: Set<Int> = emptySet(),
     val genresMap: Map<Int, String> = emptyMap(),
     val isLoading: Boolean = false,
     val isPaginationLoading: Boolean = false,

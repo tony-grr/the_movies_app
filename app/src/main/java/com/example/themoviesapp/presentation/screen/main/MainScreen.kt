@@ -139,7 +139,9 @@ fun MainScreen(
                         MovieCard(
                             movie = movie,
                             genreNames = movie.genreIds.mapNotNull { uiState.genresMap[it] },
-                            onMovieClick = onMovieClick
+                            isFavorite = uiState.favoriteIds.contains(movie.id),
+                            onMovieClick = onMovieClick,
+                            onFavoriteClick = { viewModel.handleIntent(MainScreenIntents.ToggleFavorite(it)) }
                         )
                     }
 

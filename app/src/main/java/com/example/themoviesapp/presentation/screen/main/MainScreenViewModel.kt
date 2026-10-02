@@ -2,6 +2,9 @@ package com.example.themoviesapp.presentation.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviesapp.domain.entity.movie.Movie
+import com.example.themoviesapp.domain.usecase.favorite.ObserveFavoriteIdsUseCase
+import com.example.themoviesapp.domain.usecase.favorite.ToggleFavoriteUseCase
 import com.example.themoviesapp.domain.usecase.main.GetGenresUseCase
 import com.example.themoviesapp.domain.usecase.main.GetPopularMoviesUseCase
 import com.example.themoviesapp.domain.usecase.main.GetTopRatedMoviesUseCase
@@ -16,7 +19,9 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getGenresUseCase: GetGenresUseCase
+    private val getGenresUseCase: GetGenresUseCase,
+    private val observeFavoriteIdsUseCase: ObserveFavoriteIdsUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(MainScreenUiState())
@@ -24,7 +29,16 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         loadGenres()
+        observeFavorites()
         handleIntent(MainScreenIntents.Load)
+    }
+
+    private fun observeFavorites() {
+        viewModelScope.launch {
+            observeFavoriteIdsUseCase().collect { ids ->
+                _uiState.update { it.copy(favoriteIds = ids.toSet()) }
+            }
+        }
     }
 
     private fun loadGenres() {
@@ -49,6 +63,11 @@ class MainScreenViewModel @Inject constructor(
             is MainScreenIntents.LoadNextPage -> {
                 if (!_uiState.value.isLoading && !_uiState.value.isPaginationLoading && _uiState.value.currentPage < _uiState.value.totalPages) {
                     loadMovies(isPagination = true)
+                }
+            }
+            is MainScreenIntents.ToggleFavorite -> {
+                viewModelScope.launch {
+                    toggleFavoriteUseCase(intent.movie)
                 }
             }
         }

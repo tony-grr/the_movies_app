@@ -3,8 +3,13 @@ package com.example.themoviesapp.presentation.screen.main.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +32,8 @@ fun MovieCard(
     movie: Movie,
     genreNames: List<String>,
     onMovieClick: (Int) -> Unit,
+    isFavorite: Boolean = false,
+    onFavoriteClick: (Movie) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -111,12 +118,22 @@ fun MovieCard(
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
-                    Text(
-                        text = stringResource(R.string.movie_rating_format, movie.voteAverage),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.movie_rating_format, movie.voteAverage),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(onClick = { onFavoriteClick(movie) }, modifier = Modifier.size(24.dp)) {
+                            Icon(
+                                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "Favorite",
+                                tint = if (isFavorite) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -8,6 +8,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.themoviesapp.data.worker.RefreshFavoritesWorker
 import com.example.themoviesapp.data.worker.RefreshGenresWorker
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
@@ -27,6 +28,23 @@ class App : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         scheduleRefreshGenres()
+        scheduleRefreshFavorites()
+    }
+
+    private fun scheduleRefreshFavorites() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest = PeriodicWorkRequestBuilder<RefreshFavoritesWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            RefreshFavoritesWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
     }
 
     private fun scheduleRefreshGenres() {

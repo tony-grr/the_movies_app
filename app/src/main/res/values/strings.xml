@@ -12,7 +12,8 @@
     <string name="sort_popular">Популярные</string>
     <string name="sort_top_rated">Топ рейтинга</string>
     <string name="movie_rating_format">Рейтинг: %1$.1f</string>
-    <string name="favorites_screen_title">Экран избранного</string>
+    <string name="favorites_screen_title">Избранное</string>
+    <string name="favorites_empty_list">Нет избранных фильмов</string>
     <string name="account_screen_title">Экран аккаунта</string>
     <string name="logout_btn_text">Выйти</string>
     <string name="adult_tag">18+</string>

@@ -22,6 +22,8 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "movies_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(dropAllTables = true)
+            .build()
     }
 }

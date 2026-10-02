@@ -24,6 +24,7 @@ import com.example.themoviesapp.presentation.screen.auth.AuthViewModelIntents
 import com.example.themoviesapp.presentation.screen.main.MainScreen
 import com.example.themoviesapp.presentation.screen.movie_detail.MovieDetailsScreen
 import androidx.navigation.compose.navigation
+import com.example.themoviesapp.presentation.screen.favorites.FavoritesScreen
 
 @Composable
 fun AppMainNavGraph(
@@ -57,7 +58,11 @@ fun AppMainNavGraph(
                     }
                 }
                 composable<AppMainRoute.Favorites>{
-                    Text(stringResource(R.string.favorites_screen_title))
+                    FavoritesScreen(
+                        onMovieClick = { movieId ->
+                            innerNavController.navigate(AppMainRoute.Main.Detail(movieId))
+                        }
+                    )
                 }
                 composable<AppMainRoute.Account>{
                     Column {
