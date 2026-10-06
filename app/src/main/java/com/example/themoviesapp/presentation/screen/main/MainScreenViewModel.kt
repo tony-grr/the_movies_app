@@ -2,6 +2,7 @@ package com.example.themoviesapp.presentation.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviesapp.domain.common.Result
 import com.example.themoviesapp.domain.entity.movie.Movie
 import com.example.themoviesapp.domain.usecase.favorite.ObserveFavoriteIdsUseCase
 import com.example.themoviesapp.domain.usecase.favorite.ToggleFavoriteUseCase
@@ -43,10 +44,14 @@ class MainScreenViewModel @Inject constructor(
 
     private fun loadGenres() {
         viewModelScope.launch {
-            getGenresUseCase().collect { genres ->
-                _uiState.update { state ->
-                    state.copy(genresMap = genres.associate { it.id to it.name })
+            try {
+                getGenresUseCase().collect { genres ->
+                    _uiState.update { state ->
+                        state.copy(genresMap = genres.associate { it.id to it.name })
+                    }
                 }
+            } catch (e: Exception) {
+                //TODO придумать как обрабатывать ошибки загрузки списка жанров
             }
         }
     }
@@ -81,25 +86,28 @@ class MainScreenViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = true, movies = emptyList(), currentPage = 1) }
             }
 
-            try {
-                val pageToLoad = if (isPagination) _uiState.value.currentPage + 1 else 1
-                val moviesPage = when (_uiState.value.sort) {
-                    MoviesSort.ByPopular -> getPopularMoviesUseCase(page = pageToLoad)
-                    MoviesSort.ByTopRated -> getTopRatedMoviesUseCase(page = pageToLoad)
-                }
+            val pageToLoad = if (isPagination) _uiState.value.currentPage + 1 else 1
+            val result = when (_uiState.value.sort) {
+                MoviesSort.ByPopular -> getPopularMoviesUseCase(page = pageToLoad)
+                MoviesSort.ByTopRated -> getTopRatedMoviesUseCase(page = pageToLoad)
+            }
 
-                _uiState.update { state ->
-                    state.copy(
-                        movies = if (isPagination) state.movies + moviesPage.movies else moviesPage.movies,
-                        currentPage = moviesPage.currentPage,
-                        totalPages = moviesPage.totalPages,
-                        isLoading = false,
-                        isPaginationLoading = false,
-                        error = null
-                    )
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            movies = if (isPagination) state.movies + result.data.movies else result.data.movies,
+                            currentPage = result.data.currentPage,
+                            totalPages = result.data.totalPages,
+                            isLoading = false,
+                            isPaginationLoading = false,
+                            error = null
+                        )
+                    }
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, isPaginationLoading = false, error = e.message) }
+                is Result.Error -> {
+                    _uiState.update { it.copy(isLoading = false, isPaginationLoading = false, error = result.message) }
+                }
             }
         }
     }

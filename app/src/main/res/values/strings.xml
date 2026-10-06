@@ -21,4 +21,6 @@
     <string name="movie_rating_votes_format">Рейтинг: %1$s (%2$s голосов)</string>
     <string name="movie_release_format">Релиз: %1$s</string>
     <string name="movie_overview_title">Описание</string>
+    <string name="sync_success">Синхронизация успешна</string>
+    <string name="sync_error">Ошибка синхронизации: %1$s</string>
 </resources>

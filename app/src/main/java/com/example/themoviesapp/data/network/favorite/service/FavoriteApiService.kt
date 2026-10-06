@@ -19,7 +19,7 @@ interface FavoriteApiService {
     @GET("account/{account_id}/favorite/movies")
     suspend fun getFavoriteMovies(
         @Path("account_id") accountId: Int,
-        @Query("language") language: String = "ru-RU",
+        @Query("language") language: String,
         @Query("page") page: Int = 1
     ): MovieResponseDto
 }

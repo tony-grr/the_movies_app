@@ -26,9 +26,9 @@ class GenreRepositoryImpl @Inject constructor(
         return genreDao.getGenresCount()
     }
 
-    override suspend fun refreshGenres() {
+    override suspend fun refreshGenres(language: String) {
         try {
-            val response = apiService.getList()
+            val response = apiService.getList(language = language)
             val entities = response.genres.map { dto ->
                 dto.toDomain().toEntity()
             }

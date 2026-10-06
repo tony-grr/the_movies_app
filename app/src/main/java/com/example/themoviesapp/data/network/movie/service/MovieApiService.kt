@@ -10,14 +10,14 @@ interface MovieApiService {
 
     @GET("movie/popular")
     suspend fun getPopularMovies(
-        @Query("language") language: String = "ru-RU",
+        @Query("language") language: String,
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): MovieResponseDto
 
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
-        @Query("language") language: String = "ru-RU",
+        @Query("language") language: String,
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null
     ): MovieResponseDto
@@ -25,6 +25,6 @@ interface MovieApiService {
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
-        @Query("language") language: String = "ru-RU"
+        @Query("language") language: String
     ): MovieDetailsDto
 }

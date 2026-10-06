@@ -10,14 +10,17 @@ import com.example.themoviesapp.data.network.movie.dto.toDomain
 import com.example.themoviesapp.domain.entity.movie.Movie
 import com.example.themoviesapp.domain.repository.auth.AuthRepository
 import com.example.themoviesapp.domain.repository.favorite.FavoritesRepository
+import com.example.themoviesapp.domain.repository.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavoritesRepositoryImpl @Inject constructor(
     private val favoriteMovieDao: FavoriteMovieDao,
     private val favoriteApiService: FavoriteApiService,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val settingsRepository: SettingsRepository
 ) : FavoritesRepository {
 
     override fun getFavoriteMovies(): Flow<List<Movie>> {
@@ -73,7 +76,8 @@ class FavoritesRepositoryImpl @Inject constructor(
     override suspend fun refreshFavorites() {
         try {
             val accountId = authRepository.getAccountId()?.value?.toIntOrNull() ?: return
-            val response = favoriteApiService.getFavoriteMovies(accountId)
+            val lang = settingsRepository.getLanguage().first()
+            val response = favoriteApiService.getFavoriteMovies(accountId, language = lang)
             val favoriteEntities = response.results.map { dto ->
                 dto.toDomain().toFavoriteEntity(FavoriteSyncStatus.SYNCED)
             }

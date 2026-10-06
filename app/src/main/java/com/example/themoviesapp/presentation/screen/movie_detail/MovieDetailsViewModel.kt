@@ -3,6 +3,7 @@ package com.example.themoviesapp.presentation.screen.movie_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviesapp.domain.common.Result
 import com.example.themoviesapp.domain.usecase.movie.GetMovieDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,11 +30,14 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieDetails() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            try {
-                val details = getMovieDetailsUseCase(movieId)
-                _uiState.update { it.copy(isLoading = false, movieDetails = details) }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.message ?: "Unknown error") }
+            
+            when (val result = getMovieDetailsUseCase(movieId)) {
+                is Result.Success -> {
+                    _uiState.update { it.copy(isLoading = false, movieDetails = result.data) }
+                }
+                is Result.Error -> {
+                    _uiState.update { it.copy(isLoading = false, error = result.message) }
+                }
             }
         }
     }

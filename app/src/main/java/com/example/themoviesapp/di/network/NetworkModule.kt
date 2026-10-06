@@ -1,8 +1,7 @@
 package com.example.themoviesapp.di.network
 
+import com.example.themoviesapp.BuildConfig
 import com.example.themoviesapp.data.network.auth.interceptor.TokenInterceptor
-import com.example.themoviesapp.data.network.auth.service.AuthApiService
-import com.example.themoviesapp.data.network.genre.service.GenreApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +18,6 @@ import kotlin.time.Duration.Companion.seconds
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    const val API_URL = "https://api.themoviedb.org/3/"
-
 
     @Provides
     @Singleton
@@ -41,7 +38,7 @@ object NetworkModule {
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
             .Builder()
-            .baseUrl(API_URL)
+            .baseUrl(BuildConfig.API_URL)
             .client(okHttpClient)
             .addConverterFactory(Json{ignoreUnknownKeys = true}.asConverterFactory("application/json".toMediaType()))
             .build()

@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface GenreRepository {
     fun getGenres(): Flow<List<Genre>>
     suspend fun getGenresCount(): Int
-    suspend fun refreshGenres()
+    suspend fun refreshGenres(language: String)
     suspend fun getGenreById(id: Int): Genre?
 }
