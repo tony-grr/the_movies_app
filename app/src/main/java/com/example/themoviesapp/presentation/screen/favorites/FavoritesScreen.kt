@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.themoviesapp.R
+import com.example.themoviesapp.domain.entity.movie.Movie
 import com.example.themoviesapp.presentation.screen.main.components.MovieCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,6 +24,20 @@ fun FavoritesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    FavoritesScreenContent(
+        uiState = uiState,
+        onMovieClick = onMovieClick,
+        onFavoriteClick = viewModel::toggleFavorite
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FavoritesScreenContent(
+    uiState: FavoritesUiState,
+    onMovieClick: (Int) -> Unit,
+    onFavoriteClick: (Movie) -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -67,7 +82,7 @@ fun FavoritesScreen(
                                 genreNames = movie.genreIds.mapNotNull { uiState.genresMap[it] },
                                 isFavorite = true,
                                 onMovieClick = onMovieClick,
-                                onFavoriteClick = { viewModel.toggleFavorite(it) }
+                                onFavoriteClick = onFavoriteClick
                             )
                         }
                     }

@@ -45,6 +45,17 @@ fun AuthScreen(
             onSuccessAuth()
         }
     }
+    AuthScreenContent(
+        uiState = uiState,
+        onIntent = viewModel::handleIntent
+    )
+}
+
+@Composable
+fun AuthScreenContent(
+    uiState: AuthScreenUiState,
+    onIntent: (AuthViewModelIntents) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +72,7 @@ fun AuthScreen(
             )
             AppTextField(
                 value = uiState.apiKey,
-                onValueChange = { viewModel.handleIntent(AuthViewModelIntents.ChangeApiKey(it)) },
+                onValueChange = { onIntent(AuthViewModelIntents.ChangeApiKey(it)) },
                 minLines = 4,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -74,7 +85,7 @@ fun AuthScreen(
             )
             AppTextField(
                 value = uiState.accountId,
-                onValueChange = { viewModel.handleIntent(AuthViewModelIntents.ChangeAccountId(it)) },
+                onValueChange = { onIntent(AuthViewModelIntents.ChangeAccountId(it)) },
                 singleLine = true,
                 modifier = Modifier.padding(bottom = 24.dp),
                 label = {
@@ -93,7 +104,7 @@ fun AuthScreen(
                     disabledContainerColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 enabled = !uiState.isLoading && uiState.apiKey.isNotBlank() && uiState.accountId.isNotBlank(),
-                onClick = {viewModel.handleIntent(AuthViewModelIntents.Save)}
+                onClick = { onIntent(AuthViewModelIntents.Save) }
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(

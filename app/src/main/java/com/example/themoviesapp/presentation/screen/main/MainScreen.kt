@@ -26,9 +26,7 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showSortMenu by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
-
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -42,6 +40,24 @@ fun MainScreen(
             viewModel.handleIntent(MainScreenIntents.LoadNextPage)
         }
     }
+
+    MainScreenContent(
+        uiState = uiState,
+        listState = listState,
+        onIntent = viewModel::handleIntent,
+        onMovieClick = onMovieClick
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreenContent(
+    uiState: MainScreenUiState,
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    onIntent: (MainScreenIntents) -> Unit,
+    onMovieClick: (Int) -> Unit
+) {
+    var showSortMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -78,7 +94,7 @@ fun MainScreen(
                                 )
                             },
                             onClick = {
-                                viewModel.handleIntent(MainScreenIntents.ChangeSort(MoviesSort.ByPopular))
+                                onIntent(MainScreenIntents.ChangeSort(MoviesSort.ByPopular))
                                 showSortMenu = false
                             },
                             trailingIcon = {
@@ -100,7 +116,7 @@ fun MainScreen(
                                 )
                             },
                             onClick = {
-                                viewModel.handleIntent(MainScreenIntents.ChangeSort(MoviesSort.ByTopRated))
+                                onIntent(MainScreenIntents.ChangeSort(MoviesSort.ByTopRated))
                                 showSortMenu = false
                             },
                             trailingIcon = {
@@ -117,8 +133,7 @@ fun MainScreen(
                 }
             )
         }
-    )
-{ padding ->
+    ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -141,7 +156,7 @@ fun MainScreen(
                             genreNames = movie.genreIds.mapNotNull { uiState.genresMap[it] },
                             isFavorite = uiState.favoriteIds.contains(movie.id),
                             onMovieClick = onMovieClick,
-                            onFavoriteClick = { viewModel.handleIntent(MainScreenIntents.ToggleFavorite(it)) }
+                            onFavoriteClick = { onIntent(MainScreenIntents.ToggleFavorite(it)) }
                         )
                     }
 
