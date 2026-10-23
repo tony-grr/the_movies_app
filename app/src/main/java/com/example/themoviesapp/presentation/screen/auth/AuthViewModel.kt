@@ -8,6 +8,7 @@ import com.example.themoviesapp.domain.entity.auth.AccountId
 import com.example.themoviesapp.domain.entity.auth.ApiKey
 import com.example.themoviesapp.domain.usecase.auth.AuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -67,6 +68,7 @@ class AuthViewModel @Inject constructor (
                     }
                 }
                 catch (e: Exception){
+                    if (e is CancellationException) throw e
                     savedStateHandle[UI_STATE_KEY] = newState.copy(
                         isLoading = false,
                         isSuccess = false,

@@ -8,6 +8,7 @@ import com.example.themoviesapp.domain.repository.settings.SettingsRepository
 import com.example.themoviesapp.domain.usecase.favorite.RefreshFavoritesUseCase
 import com.example.themoviesapp.presentation.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -45,6 +46,7 @@ class AccountViewModel @Inject constructor(
                 refreshFavoritesUseCase()
                 _uiState.update { it.copy(isSyncing = false, syncMessage = UiText.StringResource(R.string.sync_success)) }
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 _uiState.update { it.copy(isSyncing = false, syncMessage = UiText.StringResource(R.string.sync_error, e.message ?: "Unknown error")) }
             }
         }

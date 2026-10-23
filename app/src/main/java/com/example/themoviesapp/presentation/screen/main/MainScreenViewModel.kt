@@ -1,15 +1,16 @@
 package com.example.themoviesapp.presentation.screen.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.domain.common.Result
-import com.example.themoviesapp.domain.entity.movie.Movie
 import com.example.themoviesapp.domain.usecase.favorite.ObserveFavoriteIdsUseCase
 import com.example.themoviesapp.domain.usecase.favorite.ToggleFavoriteUseCase
 import com.example.themoviesapp.domain.usecase.main.GetGenresUseCase
 import com.example.themoviesapp.domain.usecase.main.GetPopularMoviesUseCase
 import com.example.themoviesapp.domain.usecase.main.GetTopRatedMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -51,6 +52,7 @@ class MainScreenViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 //TODO придумать как обрабатывать ошибки загрузки списка жанров
             }
         }
@@ -72,7 +74,12 @@ class MainScreenViewModel @Inject constructor(
             }
             is MainScreenIntents.ToggleFavorite -> {
                 viewModelScope.launch {
-                    toggleFavoriteUseCase(intent.movie)
+                    try {
+                        toggleFavoriteUseCase(intent.movie)
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+                        Log.d("MainScreenViewModel", "toggleFavorite: ${e.message}")
+                    }
                 }
             }
         }

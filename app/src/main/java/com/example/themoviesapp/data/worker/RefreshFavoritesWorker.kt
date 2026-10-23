@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.example.themoviesapp.domain.repository.favorite.FavoritesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CancellationException
 
 @HiltWorker
 class RefreshFavoritesWorker @AssistedInject constructor(
@@ -20,6 +21,7 @@ class RefreshFavoritesWorker @AssistedInject constructor(
             favoritesRepository.refreshFavorites()
             Result.success()
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.retry()
         }
     }

@@ -11,6 +11,7 @@ import com.example.themoviesapp.domain.entity.movie.Movie
 import com.example.themoviesapp.domain.repository.auth.AuthRepository
 import com.example.themoviesapp.domain.repository.favorite.FavoritesRepository
 import com.example.themoviesapp.domain.repository.settings.SettingsRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -67,6 +68,7 @@ class FavoritesRepositoryImpl @Inject constructor(
                  }
             }
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             if (isFavorite) {
                 favoriteMovieDao.updateSyncStatus(movieId, FavoriteSyncStatus.ERROR)
             }
@@ -83,6 +85,7 @@ class FavoritesRepositoryImpl @Inject constructor(
             }
             favoriteMovieDao.insertFavorites(favoriteEntities)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             // Ошибка сети, игнорируем или можно логировать
         }
     }

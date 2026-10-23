@@ -8,6 +8,7 @@ import com.example.themoviesapp.domain.repository.genre.GenreRepository
 import com.example.themoviesapp.domain.repository.settings.SettingsRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
 
 @HiltWorker
@@ -24,6 +25,7 @@ class RefreshGenresWorker @AssistedInject constructor(
             genreRepository.refreshGenres(lang)
             Result.success()
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.retry()
         }
     }
